@@ -1,0 +1,330 @@
+.timer-page {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 28px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px 48px;
+  align-items: start;
+}
+
+@media (max-width: 780px) {
+  .timer-page { grid-template-columns: 1fr; }
+}
+
+/* ── Timer card ── */
+.timer-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.session-toggle {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+.session-btn {
+  flex: 1;
+  padding: 10px 0;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: white;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: all 0.15s;
+  position: relative;
+}
+.session-btn.active.morning { border-color: #f59e0b; color: #92400e; background: #fffbeb; }
+.session-btn.active.night   { border-color: #6366f1; color: #3730a3; background: #eef2ff; }
+.done-badge {
+  position: absolute;
+  top: -6px; right: -6px;
+  background: #10b981;
+  color: white;
+  border-radius: 50%;
+  font-size: 9px;
+  width: 16px; height: 16px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.duration-toggle {
+  display: flex;
+  gap: 8px;
+}
+.dur-btn {
+  padding: 7px 20px;
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  background: white;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: all 0.15s;
+}
+.dur-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.dur-btn.active { border-color: var(--primary); color: var(--primary); background: #eff6ff; }
+
+/* ── Circular timer ── */
+.circular-timer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 220px;
+  height: 220px;
+}
+.timer-display {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.timer-time {
+  font-size: 46px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.timer-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* ── Timer controls ── */
+.timer-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 10px 24px;
+  transition: background 0.15s;
+}
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-secondary {
+  background: white;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 10px 24px;
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px 16px;
+}
+.btn-ghost:hover { color: var(--text); }
+.btn-large { padding: 12px 32px; font-size: 15px; }
+
+.completed-msg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: var(--text);
+  font-size: 15px;
+}
+.completed-emoji { font-size: 32px; }
+
+/* ── Spotify block ── */
+.spotify-block {
+  width: 100%;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  padding: 14px 16px;
+}
+.spotify-block.disconnected {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f9fafb;
+}
+.spotify-logo { flex-shrink: 0; }
+.spotify-cta-title { font-weight: 600; font-size: 14px; color: var(--text); margin: 0 0 2px; }
+.spotify-cta-sub   { font-size: 12px; color: var(--text-secondary); margin: 0; }
+.btn-spotify {
+  margin-left: auto;
+  background: #1DB954;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 7px 18px;
+  white-space: nowrap;
+}
+.spotify-block.connected {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+.spotify-track-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.album-art {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+.track-text { min-width: 0; }
+.track-name   { display: block; font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.track-artist { display: block; font-size: 12px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.spotify-controls {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.ctrl-btn {
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  color: var(--text-secondary);
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: color 0.15s;
+}
+.ctrl-btn:hover { color: var(--text); }
+.ctrl-btn.main { font-size: 22px; color: #1DB954; }
+.ctrl-btn.disconnect { margin-left: auto; font-size: 12px; }
+
+/* ── Stats column ── */
+.stats-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.stats-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  box-shadow: var(--shadow);
+}
+.stats-card h3 {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  margin: 0 0 14px;
+}
+
+.today-row {
+  display: flex;
+  gap: 12px;
+}
+.today-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: #f8faff;
+}
+.today-item.done {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+  color: var(--text);
+}
+.today-item .check {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 700;
+  color: #10b981;
+}
+.pending-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  margin-left: auto;
+}
+
+.streak-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.streak-icon { font-size: 36px; }
+.streak-text { display: flex; flex-direction: column; }
+.streak-num   { font-size: 36px; font-weight: 800; color: var(--text); line-height: 1; }
+.streak-label { font-size: 13px; color: var(--text-secondary); font-weight: 500; }
+
+.history-card { overflow: hidden; }
+.history-strip {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+.history-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 34px;
+}
+.history-label {
+  font-size: 10px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.history-dot {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--border);
+  background: #f8faff;
+}
+.history-dot.done { background: #10b981; border-color: #10b981; color: white; }
+.history-dot.night.done { background: #6366f1; border-color: #6366f1; }
+.history-legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  align-items: center;
+}
+.legend-dot {
+  display: inline-block;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: #f8faff;
+  margin-right: 4px;
+}
+.legend-dot.done { background: #10b981; border-color: #10b981; }
