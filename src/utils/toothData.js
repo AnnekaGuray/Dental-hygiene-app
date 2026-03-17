@@ -2,19 +2,22 @@
 // Upper arch: 1 (upper-right wisdom) → 16 (upper-left wisdom)
 // Lower arch: 17 (lower-left wisdom) → 32 (lower-right wisdom)
 
+// Tooth sizes in scene units (roughly 10× real mm scale)
+// rx = mesiodistal half-width, rz = bucco-lingual half-depth, h = crown height
 const TOOTH_SIZES = {
-  wisdom:   { rx: 0.26, rz: 0.28, h: 0.42 },
-  molar:    { rx: 0.28, rz: 0.32, h: 0.48 },
-  premolar: { rx: 0.20, rz: 0.22, h: 0.46 },
-  canine:   { rx: 0.15, rz: 0.16, h: 0.54 },
-  incisor:  { rx: 0.13, rz: 0.18, h: 0.46 },
+  wisdom:   { rx: 0.24, rz: 0.26, h: 0.38 },
+  molar:    { rx: 0.26, rz: 0.28, h: 0.44 },
+  premolar: { rx: 0.18, rz: 0.22, h: 0.42 },
+  canine:   { rx: 0.15, rz: 0.16, h: 0.50 },
+  // Incisors are the KEY: very thin (rz=0.07) so they look like chisel/paddle shapes
+  incisor:  { rx: 0.19, rz: 0.07, h: 0.42 },
 };
 
 const UPPER_TYPES = [
   'wisdom','molar','molar','premolar','premolar','canine','incisor','incisor',
   'incisor','incisor','canine','premolar','premolar','molar','molar','wisdom',
 ];
-const LOWER_TYPES = [...UPPER_TYPES]; // symmetric
+const LOWER_TYPES = [...UPPER_TYPES];
 
 const UPPER_NAMES = [
   'UR Wisdom','UR 2nd Molar','UR 1st Molar','UR 2nd Premolar','UR 1st Premolar','UR Canine','UR Lateral Incisor','UR Central Incisor',
@@ -25,19 +28,27 @@ const LOWER_NAMES = [
   'LR Central Incisor','LR Lateral Incisor','LR Canine','LR 1st Premolar','LR 2nd Premolar','LR 1st Molar','LR 2nd Molar','LR Wisdom',
 ];
 
-// Arch: semi-ellipse in the XZ plane.
-// angle 0→π maps from right-back → front-center → left-back
+// Semi-ellipse arch.  angle 0→π = right-back → front → left-back
+// rotationY makes each tooth face radially outward from the arch center.
 function archPositions(count, a, b, flipX = false) {
   return Array.from({ length: count }, (_, i) => {
     const angle = (i / (count - 1)) * Math.PI;
     const x = a * Math.cos(angle) * (flipX ? -1 : 1);
     const z = -b * Math.sin(angle);
-    return { x, z };
+
+    // Face tooth outward from arch centre.
+    // Formula derived from ellipse tangent: rotY = atan2((b/a)·x, (a/b)·z)
+    // For the flipped lower arch the sign flips on both axes.
+    const rotationY = flipX
+      ? Math.atan2(-(b / a) * x, -(a / b) * z)
+      : Math.atan2((b / a) * x, (a / b) * z);
+
+    return { x, z, rotationY };
   });
 }
 
 const upperPos = archPositions(16, 3.2, 2.2);
-const lowerPos = archPositions(16, 3.0, 2.0, true); // flipped: L→R for lower arch
+const lowerPos = archPositions(16, 3.0, 2.0, true);
 
 export const UPPER_TEETH = upperPos.map((pos, i) => ({
   id: i + 1,
@@ -45,7 +56,7 @@ export const UPPER_TEETH = upperPos.map((pos, i) => ({
   name: UPPER_NAMES[i],
   type: UPPER_TYPES[i],
   arch: 'upper',
-  y: 0.55,
+  y: 0.50,
   ...pos,
   ...TOOTH_SIZES[UPPER_TYPES[i]],
 }));
@@ -56,7 +67,7 @@ export const LOWER_TEETH = lowerPos.map((pos, i) => ({
   name: LOWER_NAMES[i],
   type: LOWER_TYPES[i],
   arch: 'lower',
-  y: -0.55,
+  y: -0.50,
   ...pos,
   ...TOOTH_SIZES[LOWER_TYPES[i]],
 }));
@@ -74,3 +85,8 @@ export const STATUS_LABELS = {
   watch:     'Monitor',
   attention: 'Needs Attention',
 };
+
+// Arch parameters exported so TeethScene can build gum geometry
+export const UPPER_ARCH = { a: 3.2, b: 2.2 };
+export const LOWER_ARCH = { a: 3.0, b: 2.0 };
+export const GUM_Y = { upper: 0.12, lower: -0.12 };
