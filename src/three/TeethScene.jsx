@@ -3,6 +3,7 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Html, Environment } from '@react-three/drei';
 import * as THREE from 'three';
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 import { UPPER_TEETH, LOWER_TEETH, STATUS_COLORS } from '../utils/toothData';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -34,6 +35,7 @@ function JawModel() {
 
       obj.traverse(child => {
         if (!child.isMesh) return;
+        child.geometry = mergeVertices(child.geometry);
         child.geometry.computeVertexNormals();
         child.raycast = () => {};
         const matName = child.material?.name ?? '';
